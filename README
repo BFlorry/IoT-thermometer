@@ -1,0 +1,43 @@
+This is an old university excercise made for IoT-prototypes -course. I'll start working on it one day, but until then, this design document/post mortem is in Finnish.
+
+IOT-Prototyypit TIEA345 Harjoitustyö - Mikko Mäntylä
+
+Johdanto
+
+Harjoitustyön aiheeksi valitsin IOT-lämpömittarin, joka hälyttää käyttäjälle, kun lämpötila menee halutun rajan ulkopuolelle.
+
+
+Toteutus
+
+Laitteistona käytetään Raspberry Pi 3, jossa mystinen kiinalainen TFT-kosketusnäyttö, josta kesken harjoitustyötä meni kosketusfunktio rikki. Lisäksi käytetään DHT11-lämpö/kosteusmittarikomponenttia koekytkentälevyllä.
+Käyttäjälle ilmoitus toteutettiin sähköpostilla, sillä se oli yksinkertaisin integroida yhteen .py-tiedostoon. Tietokantana mittauksille toimii Google sheets https://docs.google.com/spreadsheets/d/1j4Kn-JMSjMastnXANbhrMvhAqwjzNkC5fN04CGOz47w/edit?usp=sharing jossa myös dynaaminen graafi lämpötiloista.
+Lämpötilan mittaamiseen käytin aikaisemmassa demoharjoituksessa tekemääni koodia, joka oli lähes suoraan käytettävissä. GUI:n tekemiseen käytin Tkinteriä, joka osoittautui yllättävänkin helpoksi käyttää.
+
+Yritin myös saada ohjelman käynnistymään käyttöjärjestelmän (raspbian) yhteydessä, mutta kaikista yrityksistä huolimatta, ohjelma vain käynnistyy noin sekunniksi, kunnes se sammuu itsekseen.
+
+Ohjelma pitää käynnistää seuraavalla komennolla: sudo /home/pi/TIEA345/Temp.py
+Ohjelma aukaisee terminaalin debuggausta varten, sekä GUI-sovelluksen, josta ohjelman käyttäytymistä voi hieman seurata ja muokata.
+GUI:ssa on seuraavat elementit:
+*Lämpötila
+	Näyttää viimeisimmän lämpötilan muodossa "Temp: 22"
+*Sähköpostin vaihto
+	Painikkeesta "Change email" painamalla avautuu uusi ikkuna, jossa on tekstikenttä, johon käyttäjä voi kirjoittaa haluamansa sähköpostiosoitteen. Kun sähköposti on kirjoitettu, voi painaa "Apply", joka ottaa sähköpostin käyttöön (ei kuitenkaan tallennu seuraavaa käynnistyskertaa varten). Ikkunasta pääsee pois painamalla "Cancel" (Jos sähköposti on jo vaihdettu, tällä painikkeella pääsee pois, mutta uusi sähköposti jää voimaan)
+*Sovelluksesta poistuminen
+	Sovelluksesta poistutaan painamalla "Exit"-painiketta.
+
+
+Pohdinta
+
+
+Prototyyppi onnistui mielestäni hyvin kokonaisvaltaisesti. Sovellus toimii kaikilta niiltä osin, jotka johdannossa esiteltiin.
+Parannettavan varaa:
+* Sähköpostin muutos tallentaisi uuden sähköpostin pysyvästi
+* Sähköpostin muutosikkunan "Apply"-nappula sulkisi muutosikkunan, jottei käyttäjän tarvitsisi erikseen painaa "Cancel"-nappulaa poistuakseen
+* Sovellus saisi käynnistyä käynnistyksessä, mieluusti ennen windowmanageria (tämän yrittämiseen käytin tunteja ilman tulosta)
+* Pitäisi tehdä varoituslämpötilan muutospainike sähköpostin muutospainikkeen tavoin (olisi helppoa)
+* Sovelluksen käyttöliittymä jumittaa pahasti lämpötilaa selvitettäessä, tekee käyttämisestä ikävää - mahdollinen korjaus voisi olla tekemällä mittausvälin pitkäksi
+* Mahdollisesti lisää viestinvälityskeinoja
+* Sähköpostivaroitus sisältää tällä hetkellä pelkän lämpötilan - voisi olla myös graafi lämpötilasta (suoraan google sheetsistä saatavilla)
+* Lämpötilan mittaaminen vain max. joka 30min. Tällä hetkellä n. joka 5s.
+* Lämpötilagraafin voisi laittaa jollekin verkkosivulle
+
